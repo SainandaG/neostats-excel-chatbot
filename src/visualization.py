@@ -31,6 +31,11 @@ def generate_chart(df, parsed):
             fig.update_layout(xaxis_title=col, yaxis_title="Count")
             return fig
         else:
+            # For raw data line chart, just plot col over index if numeric
+            if col in df.columns and df[col].dtype.kind in 'biufc':  # numeric check
+                fig = px.line(df, y=col, title=f"Line chart of {col}")
+                fig.update_layout(xaxis_title="Index", yaxis_title=col)
+                return fig
             return None
 
     else:

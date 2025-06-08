@@ -48,7 +48,7 @@ def process_query(df, parsed):
     try:
         # Normalize all df columns once
         normalized_columns = {normalize_column_name(c): c for c in df.columns}
-        
+
         col_key = None
         if parsed.get('column'):
             parsed_col_norm = normalize_column_name(parsed['column'])
@@ -86,6 +86,13 @@ def process_query(df, parsed):
             data = df.groupby(col_key).size().reset_index(name='count')
             chart = generate_chart(data, {'operation': 'group_by', 'column': col_key, 'visualization': viz})
             return data, chart
+
+        # NEW: handle visualization-only queries with no aggregation
+        if op == 'none' and viz in ['histogram', 'bar', 'line']:
+            if col_key is None:
+                return f"Column '{parsed.get('column')}' not found in data.", None
+            chart = generate_chart(df, parsed)
+            return f"Showing a {viz} of {col_key}", chart
 
         else:
             return "Query not supported", None
