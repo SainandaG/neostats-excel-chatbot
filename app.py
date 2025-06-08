@@ -1,8 +1,8 @@
 import streamlit as st
 import pandas as pd
 from src.utils import normalize_column_name, suggest_queries
-from src.query_processor import process_query, parse_query
-from src.visualization import generate_chart
+from src.query_processors import process_query, parse_query
+from src.visualizations import generate_chart
 
 st.set_page_config(page_title="NeoStats Excel Chatbot", layout="wide")
 
